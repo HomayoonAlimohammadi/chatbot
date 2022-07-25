@@ -1,13 +1,16 @@
 import socket
+import json
 
 
-HOST = "127.0.0.1"
-PORT = 65431
-
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-    s.connect((HOST, PORT))
-    s.sendall(b"1,2,3")
-    data = s.recv(1024).decode()
+with open("conf.json", "r") as f:
+    data = json.load(f)
+    HOST = data["HOST"]
+    PORT = data["PORT"]
+    print(HOST, PORT)
 
 
-print(f"Recieved data: {data}")
+for i in range(5):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.connect((HOST, PORT))
+        s.sendall(b"my request")
+        data = s.recv(1024).decode()
